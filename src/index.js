@@ -1,10 +1,14 @@
 import './css/style.css';
 import regeneratorRuntime from "regenerator-runtime";
 import LeagueData from './js/models/LeagueData';
+import * as teamView from  './js/views/teamView';
+import {elements} from './js/views/base';
 
 
 const data = {};
-const state = {};
+const state = {
+    // team:'LIV'
+};
 // CONTROL APP
 const AppController = async () =>{
     // GET DATA FROM API
@@ -16,10 +20,18 @@ const AppController = async () =>{
     } else{
     // IF THERES NOTHING IN STORAGE RENDER PICK TEAM AND THEN RENDER APP UI
     // RENDER HTML OF SLIDER
-    console.log(data);
+    data.league.teams.forEach(el => teamView.renderPickTeam(el));
+    // INITIALIZE SLIDER
+    teamView.initSlider();
+    // 
     }
 };
 AppController();
 
 window.i = data;
 
+window.addEventListener('load',()=>{
+// Check if local storage has favourite club
+
+// Send data from local storage to state.team.
+});

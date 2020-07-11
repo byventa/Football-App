@@ -16,3 +16,45 @@ html {
 
 body {
   min-height: calc(100vh - 2 * 4vw); }
+  
+  .swiper-container {
+    width: 50%;
+    height: 100%;
+  }
+
+  .swiper-slide {
+    cursor:grab;
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  .slide-link{
+    color: #b2e950;
+    text-decoration: none;
+    padding: 2em;
+    font-family: 'Poppins', sans-serif;
+  }
+  .slide-link img{
+    padding: 2em;
+  }
+.swiper-button-next,
+.swiper-button-prev {
+    background-color: #b2e950;
+    right:10px;
+    padding: 30px;
+    color: #000 !important;
+    fill: black !important;
+    stroke: black !important;
+}
