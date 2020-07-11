@@ -30,6 +30,13 @@ AppController();
 
 window.i = data;
 
+const getTeam = () =>{
+    const el = document.querySelector('.swiper-slide-active')
+    const teamAtt = el.getAttribute('data-team');
+    console.log(teamAtt);
+}
+elements.getTeam.addEventListener('click', getTeam);
+
 window.addEventListener('load',()=>{
 // Check if local storage has favourite club
 
