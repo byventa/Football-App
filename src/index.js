@@ -2,7 +2,7 @@ import './css/style.css';
 import regeneratorRuntime from "regenerator-runtime";
 import LeagueData from './js/models/LeagueData';
 import * as teamView from  './js/views/teamView';
-import {elements} from './js/views/base';
+import {elements,fans,cleanHTML} from './js/views/base';
 
 
 const data = {};
@@ -20,11 +20,10 @@ const AppController = async () =>{
     } else{
     // IF THERES NOTHING IN STORAGE RENDER PICK TEAM AND THEN RENDER APP UI
     // RENDER HTML OF SLIDER
+    cleanHTML();
     data.league.teams.forEach(el => teamView.renderPickTeam(el));
     // INITIALIZE SLIDER
-    teamView.initSlider();
-    // 
-    }
+    teamView.initSlider();    }
 };
 AppController();
 
@@ -35,10 +34,18 @@ const getTeam = () =>{
     const teamAtt = el.getAttribute('data-team');
     console.log(teamAtt);
 }
-elements.getTeam.addEventListener('click', getTeam);
+// elements.getTeam.addEventListener('click', getTeam);
 
-window.addEventListener('load',()=>{
-// Check if local storage has favourite club
+// window.addEventListener('load',()=>{
+// // Check if local storage has favourite club
 
-// Send data from local storage to state.team.
-});
+// // Send data from local storage to state.team.
+// });
+document.querySelector('.swiper-container').addEventListener('transitionend', ()=>{
+    const el = document.querySelector('.swiper-slide-active')
+    const teamAtt = el.getAttribute('data-team');
+    console.log(teamAtt);
+    document.querySelector('.select__button').textContent = fans[teamAtt];
+})
+teamView.hideNav();
+window.addEventListener('resize',teamView.hideNav);

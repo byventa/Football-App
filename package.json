@@ -31,7 +31,8 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.js --open",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "safari": "webpack-dev-server --config webpack.dev.js --open --host 0.0.0.0 --port 3000"
   },
   "author": "",
   "license": "ISC"

@@ -17,44 +17,101 @@ html {
 body {
   min-height: calc(100vh - 2 * 4vw); }
   
-  .swiper-container {
-    width: 50%;
-    height: 100%;
-  }
-
-  .swiper-slide {
-    cursor:grab;
-    text-align: center;
-    font-size: 18px;
-    background: #fff;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-  }
-  .slide-link{
-    color: #b2e950;
-    text-decoration: none;
-    padding: 2em;
-    font-family: 'Poppins', sans-serif;
-  }
-  .slide-link img{
-    padding: 2em;
-  }
+.swiper-slide {
+  cursor:grab;
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  min-height: 400px;
+}
+.slide-link{
+  color: #01ff83;
+  text-decoration: none;
+  padding: 2em;
+  font-family: 'Poppins', sans-serif;
+}
+.slide-link img{
+  padding: 2em;
+}
 .swiper-button-next,
 .swiper-button-prev {
-    background-color: #b2e950;
+    background-color: #01ff83;
     right:10px;
     padding: 30px;
     color: #000 !important;
     fill: black !important;
     stroke: black !important;
+}
+.select__heading{
+  text-align: center;
+  font-size: 1.25vw;
+  font-family: 'Poppins', sans-serif;
+  color:white;
+  background-color: #fe015b;
+  padding: 2em;
+  margin-bottom: 1em;
+}
+.select__button{
+  all: unset;
+  font-family: 'Poppins', sans-serif;
+  font-size: 3em;
+  padding:0.5em;
+  margin: 0.5em;
+  cursor: pointer;
+  border:none;
+  outline:none;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  color:#fe015b;
+  background-color: white;
+}
+.select__button:hover{
+  background-color: #01ff83;
+  color:#36003c;
+}
+.select__container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-container {
+  width: 50%;
+}
+.select__favourite-team{
+  background-image: url('/src/img/logos/bgred.svg');
+  background-size: cover;
+  height: 100%;
+}
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 600px) {
+  .swiper-container {
+    width: 70%;
+  }
+  .select__heading{
+    font-size: 3vw;
+    padding: 3em;
+  }
+}
+@media only screen and (min-height: 600px) {
+  .select__favourite-team{
+    height: 100vh;
+  }
+}
+@media only screen and (min-height: 800px) {
+  .swiper-container {
+    width: 40%;
+  }
 }
