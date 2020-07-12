@@ -1,9 +1,12 @@
+// REUSABLE CONTENT
 export const elements = {
     slidesContainer:document.querySelector('.swiper-wrapper'),
-    getTeam:document.querySelector('.getTeam')
+    selectTeam:document.querySelector('.select__button'),
+    swiperContainer: document.querySelector('.swiper-container'),
+    root:document.getElementById('root')
 }
-export const cleanHTML = ()=>{
-    elements.slidesContainer.innerHTML= "";
+export const cleanHTML = (el)=>{
+    el.innerHTML= "";
 }
 export const colors = {
     red:'#36003C',
