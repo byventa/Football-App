@@ -1,40 +1,41 @@
 import './css/style.css';
 import regeneratorRuntime from "regenerator-runtime";
 import LeagueData from './js/models/LeagueData';
-import ChooseTeamData from './js/models/ChooseTeamData';
 import * as chooseView from  './js/views/chooseView';
-import {elements,fans} from './js/views/base';
+import * as teamView from  './js/views/teamView';
+import {fans, cleanHTML} from './js/views/base';
 // GLOBAL VARIABLES
 const data = {};
-const state = {};
-window.s = state;
 window.i = data;
 
 // CONTROLLERS
 const logicController = async () =>{
     // Get data from API
     data.league = new LeagueData ('PL')
-    await data.league.getTeamData();
-    state.myteam = new ChooseTeamData();
-    state.myteam.readStorage();
+    await data.league.getLeagueData();
+    data.league.readStorage();
 };
+
 const viewController = async ()=>{
 await logicController();
-if(state.myteam.favouriteTeam){
-// render html on team 
-}else{
+if(data.league.favouriteTeam){
+    data.league.getData();
+teamView.renderTeamView(data.league.teams);
+}else if(!data.league.favouriteTeam){
     await chooseView.renderHTML();
     loadChooseView();
     document.querySelector('.select__button').addEventListener('click',()=>{
-        state.myteam.chooseTeam();
-        console.log('a');
+    data.league.chooseTeam();
+    data.league.getData();
+    cleanHTML(document.getElementById('root'));
+    teamView.renderTeamView(data.league.teams[1]);
     })
 }
-
 }
 viewController();
 
-const loadChooseView =()=>{
+const loadChooseView = ()=>{
+// LOAD CONTENT
     data.league.teams.forEach(el => chooseView.renderTeams(el));
     chooseView.initSlider();
 // EVENT LISTENERS

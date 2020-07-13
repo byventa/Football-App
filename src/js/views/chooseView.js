@@ -1,5 +1,5 @@
-import {elements,colors} from './base';
-import Swiper, { Navigation,Pagination,Scrollbar,EffectCoverflow, Keyboard } from 'swiper';
+import {elements} from './base';
+import Swiper, { Navigation, Keyboard } from 'swiper';
 import 'swiper/swiper-bundle.css';
 
 // Render choose html
@@ -60,3 +60,4 @@ export const hideNav = ()=>{
 
   }
 }
+
