@@ -1,6 +1,7 @@
 * {
   margin: 0;
-  padding: 0; }
+  padding: 0; 
+  box-sizing: border-box;}
 
 *,
 *::before,
@@ -8,15 +9,20 @@
   box-sizing: inherit; }
 
 html {
-  box-sizing: border-box;
   font-size: 62.5%; }
   @media only screen and (max-width: 68.75em) {
     html {
       font-size: 50%; } }
 
 body {
-  min-height: calc(100vh - 2 * 4vw); }
-  
+  min-height: calc(100vh - 2 * 4vw); 
+  background-image: url('/src/img/logos/bgred.svg');
+  background-repeat: cover;
+}
+img{
+  max-width: 100%;
+}
+
 .swiper-slide {
   cursor:grab;
   text-align: center;
@@ -110,8 +116,195 @@ body {
     height: 100vh;
   }
 }
-@media only screen and (min-height: 800px) {
-  .swiper-container {
-    width: 40%;
+
+
+/* TEAM VIEW AREA */
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 1px 1px;
+    grid-template-areas: "left" "middle" "right";
+    
+  }
+  
+  .left {
+    /* background-color: white; */
+    display: grid;
+    grid-template-columns: 1fr;
+    /* grid-template-rows: 1fr 1fr ; */
+    gap: 1px 1px;
+    grid-template-areas: "team-logo" "league-standings" ;
+    grid-area: left;
+  }
+  
+  .team-logo { 
+    grid-area: team-logo;
+    padding-top: 40px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25em;
+    padding-bottom: 15px;
+    color: white;
+
+   }
+   .circle{
+     display: inline-block;
+     width: 140px;
+     height: 140px;
+     line-height: 140px;
+     border-radius: 50%;
+     background-color: #f7f7f7;
+   }
+   .circle img{
+     height: 100px;
+     vertical-align: middle;
+   }
+  .league-standings { grid-area: league-standings; }
+  .team-standing{
+    margin: 0 5% 0 5%;
+    background-color: #f7f7f7;
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr 2fr 0.5fr 0.5fr 0.7fr;
+    grid-template-rows:minmax(50px,auto) 1fr;
+    align-items: center;
+    justify-content: center;
+  }
+  .team-standing:nth-child(2n){
+    background-color: white;
+  }
+  .team-standing > * p{
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5em;
+    text-align: center;
+  }
+  .team-crest{
+    text-align: center;
+  }
+  .team-crest img{
+    height: 3rem;
+  }
+  /* .twitter-feed { grid-area: twitter-feed; } */
+  
+  .middle {
+    background-color: yellow;
+    display: grid;
+    grid-template-columns: 1fr;
+    /* grid-template-rows: 0.5fr 0.9fr 1.6fr; */
+    gap: 1px 1px;
+    grid-template-areas: "search-area" "next-match" "matches-area";
+    grid-area: middle;
+  }
+  
+  .search-area { 
+    display: grid;
+    grid-area: search-area;
+    grid-template-rows:minmax(50px,auto) 1fr;
+   }
+   .search{
+     background: white;
+     display: grid;
+     grid-template-columns:1fr;
+   }
+   .search input{  
+     outline: 0;
+     border: 0;
+     padding:0 5% 0 5%;
+     font-size:2em;
+     font-family: 'Poppins', sans-serif;
+   }
+  .next-match { grid-area: next-match; }
+  
+  .matches-area {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* grid-template-rows: 0.7fr 1.3fr; */
+    gap: 1px 1px;
+    grid-template-areas: "choose-matches" "fixtures";
+    grid-area: matches-area;
+  }
+  
+  .choose-matches { grid-area: choose-matches; }
+  
+  .fixtures { grid-area: fixtures; }
+  
+  .right {
+    background-color: green;
+    display: grid;
+    grid-template-columns: 1fr;
+    /* grid-template-rows: 1.6fr 1fr 0.4fr; */
+    gap: 1px 1px;
+    grid-template-areas: "time-area" "top-scorers" "facebook-feed";
+    grid-area: right;
+  }
+  
+  .time-area { grid-area: time-area; }
+  
+  .top-scorers { grid-area: top-scorers; }
+  
+  .facebook-feed { grid-area: facebook-feed; }
+
+
+/* DESKTOP */
+@media only screen and (min-width:700px){
+.teamView-container{
+  margin: 0 1vw 0 1vw;
+  background-color: red;
+  border-radius: 30px;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 0.6fr 1.6fr 0.8fr;
+  grid-template-rows: 1fr;
+  gap: 1px 1px;
+  grid-template-areas: "left middle right";
+}
+}
+@media only screen and (min-width:1300px){
+  .teamView-container{
+    margin: 0 15vw 0 15vw;
+    background-color: red;
+    border-radius: 30px;
   }
 }
+/* .fixture-area{
+  display: inline-block;
+  background-color: white;
+  width: 90%;
+  margin:auto auto;
+  border-radius: 5px;
+  height: 60px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.5em;
+}
+.inline{
+  display: inline-block;
+}
+.fixture-teams{
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: inline-flex;
+}
+.score{
+  width:10%;
+  text-align: center;
+  background-color: green;
+  height: 100%;
+  border-radius: 50px;
+}
+.team p{
+  padding:0 1em 0 1em;
+}
+.team{
+  padding:0 2em 0 2em;
+  height: 100%;
+  width: 40%;
+}
+.team img{
+  vertical-align:middle;
+}
+div.team > *{
+  display: inline-block;
+} */

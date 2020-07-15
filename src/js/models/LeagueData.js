@@ -26,7 +26,7 @@ export default class LeagueData {
         let resStandings =  await fetch(`http://api.football-data.org/v2/competitions/${this.query}/standings`,{
         headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' }});
         let standings = await resStandings.json();
-        this.standings = standings.standings;
+        this.table = standings.standings[0].table;
 
     }
     async getTopScorers(){
@@ -35,23 +35,21 @@ export default class LeagueData {
         let scorers = await resScorers.json();
         this.scorers = scorers;
     }
-    getData(){
-        this.getMatchesData();
-        this.getLeagueStandings();
-        this.getTopScorers();
-    }
     chooseTeam(){
         const favouriteTeam = document.querySelector('.select__button').getAttribute('data-team');
+        const favouriteTeamFullName = document.querySelector('.select__button').getAttribute('data-teamFullName');
+        console.log(favouriteTeamFullName);
         this.favouriteTeam = favouriteTeam;
+        this.favouriteTeamFullName = favouriteTeamFullName;
         const teamID = this.teams.findIndex(team => team.tla == favouriteTeam);
         this.teamID = parseInt(this.teams[parseInt(teamID)].id);
-        localStorage.setItem('favouriteTeam',favouriteTeam );
         localStorage.setItem('teamID',this.teamID );
+        localStorage.setItem('favouriteTeamFullName',this.favouriteTeamFullName);
     }
     readStorage(){
-        const storageTeam = localStorage.getItem('favouriteTeam');
         const storageID = localStorage.getItem('teamID');
-        this.favouriteTeam = storageTeam;
+        const storageFullName = localStorage.getItem('favouriteTeamFullName');
         this.teamID = parseInt(storageID);
+        this.favouriteTeamFullName = storageFullName;
     }
 }

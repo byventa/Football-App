@@ -14,21 +14,26 @@ const logicController = async () =>{
     data.league = new LeagueData ('PL')
     await data.league.getLeagueData();
     data.league.readStorage();
+    await data.league.getLeagueStandings();
+    data.league.getTopScorers();
 };
 
 const viewController = async ()=>{
 await logicController();
-if(data.league.favouriteTeam){
-    data.league.getData();
-teamView.renderTeamView(data.league.teams);
-}else if(!data.league.favouriteTeam){
+if(data.league.teamID){
+    await data.league.getMatchesData();
+    teamView.renderTeamView(data.league);
+    data.league.table.forEach(el => teamView.renderStandings(el));
+
+}else if(!data.league.teamID){
     await chooseView.renderHTML();
     loadChooseView();
     document.querySelector('.select__button').addEventListener('click',()=>{
-    data.league.chooseTeam();
-    data.league.getData();
-    cleanHTML(document.getElementById('root'));
-    teamView.renderTeamView(data.league.teams[1]);
+        data.league.chooseTeam();
+        data.league.getMatchesData();
+        cleanHTML(document.getElementById('root'));
+        teamView.renderTeamView(data.league);
+        data.league.table.forEach(el => teamView.renderStandings(el));
     })
 }
 }
@@ -42,10 +47,11 @@ const loadChooseView = ()=>{
     document.querySelector('.swiper-container').addEventListener('transitionend', ()=>{
         const el = document.querySelector('.swiper-slide-active');
         const teamAtt = el.getAttribute('data-team');
+        const teamFullNameAtt = el.getAttribute('data-teamfullname');
         document.querySelector('.select__button').setAttribute("data-team", teamAtt)
+        document.querySelector('.select__button').setAttribute("data-teamfullname", teamFullNameAtt)
         document.querySelector('.select__button').textContent = fans[teamAtt];
     })
     chooseView.hideNav();
     window.addEventListener('resize',chooseView.hideNav);
 }
-

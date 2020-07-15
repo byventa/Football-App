@@ -17,7 +17,7 @@ export const renderHTML = ()=>{
        <div class="swiper-button-prev"></div>
    </div>
    <div class="select__container">
-       <button class="select__button" data-team="ARS">I'am a Gooner</button>
+       <button class="select__button" data-id="57" data-team="ARS">I'am a Gooner</button>
    </div>
 </div>`;
 elements.root.innerHTML = markup;
@@ -26,9 +26,9 @@ elements.root.innerHTML = markup;
 export const renderTeams = team =>{
 let teamColor = team.clubColors.toLowerCase().split("/").join().replace(" ","").replace(" ","").split(',')[0];
 const markup = `
-<div class="swiper-slide" style="background-color:#36003C" data-team="${team.tla}">
+<div class="swiper-slide" style="background-color:#36003C" data-id="${team.id}" data-team="${team.tla}" data-teamFullName="${team.name}">
     <div class="slide-link">
-        <img src = "src/img/logos/${team.tla}.svg" style ="width:auto; height:20vw;">
+        <img src="src/img/logos/${team.id}.svg" style ="width:auto; height:20vw;">
         <h2>${team.name}</h2>
     </div>
 </div>`;
