@@ -3,7 +3,8 @@ import regeneratorRuntime from "regenerator-runtime";
 import LeagueData from './js/models/LeagueData';
 import * as chooseView from  './js/views/chooseView';
 import * as teamView from  './js/views/teamView';
-import {fans, cleanHTML} from './js/views/base';
+import * as searchView from  './js/views/searchView';
+import {fans, cleanHTML, elements} from './js/views/base';
 // GLOBAL VARIABLES
 const data = {};
 window.i = data;
@@ -19,23 +20,32 @@ const logicController = async () =>{
 };
 
 const viewController = async ()=>{
-await logicController();
-if(data.league.teamID){
-    await data.league.getMatchesData();
-    teamView.renderTeamView(data.league);
-    data.league.table.forEach(el => teamView.renderStandings(el));
-
-}else if(!data.league.teamID){
-    await chooseView.renderHTML();
-    loadChooseView();
-    document.querySelector('.select__button').addEventListener('click',()=>{
-        data.league.chooseTeam();
-        data.league.getMatchesData();
-        cleanHTML(document.getElementById('root'));
+    await logicController();
+    if(data.league.teamID){
+        await data.league.getMatchesData();
         teamView.renderTeamView(data.league);
-        data.league.table.forEach(el => teamView.renderStandings(el));
-    })
-}
+        data.league.table.forEach(el => teamView.renderStandings(el,data.league.teamID));
+       let timeout = null;
+        document.querySelector('.search-bar').addEventListener('keyup',e=>{
+            let value = document.querySelector('.search-bar').value
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                cleanHTML(document.querySelector('.search-dynamic-results'));;
+                searchView.renderSearch(value,data.league);
+            }, 700);
+        })
+
+    }else if(!data.league.teamID){
+        await chooseView.renderHTML();
+        loadChooseView();
+        document.querySelector('.select__button').addEventListener('click',()=>{
+            data.league.chooseTeam();
+            data.league.getMatchesData();
+            cleanHTML(document.getElementById('root'));
+            teamView.renderTeamView(data.league);
+            data.league.table.forEach(el => teamView.renderStandings(el));
+        })
+    }
 }
 viewController();
 
