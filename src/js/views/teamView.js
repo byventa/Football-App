@@ -1,4 +1,3 @@
-import * as searchView from  './searchView';
 export const renderTeamView = el =>{
 
 const markup = `
@@ -88,4 +87,50 @@ export const renderStandings = (team,teamID) =>{
         });
     }
 
+}
+export const nextMatch = data =>{
+const nextFixture = data.favTeamMatches.findIndex(match => match.status ==="SCHEDULED")
+const homeTeam = data.teams.findIndex(team => team.name === data.favTeamMatches[nextFixture].homeTeam.name);
+const awayTeam = data.teams.findIndex(team => team.name === data.favTeamMatches[nextFixture].awayTeam.name);
+const date = data.favTeamMatches[nextFixture].utcDate.replace('Z',"").split('T');
+const time = date[1].slice(0,5);
+const day = date[0].slice(8,10);
+const month = date[0].slice(5,7);
+const markup = `
+<div class="next-match-imgs">
+    <div class="next-match-img"><img src="src/img/logos/pl-${data.favTeamMatches[nextFixture].homeTeam.id}.png">
+    </div>
+    <div class="next-match-img"><img src="src/img/logos/pl-${data.favTeamMatches[nextFixture].awayTeam.id}.png">
+    </div>
+</div>
+<div class="next-match-info">
+    <div class="next-match-team"><div class="team-crest"><img src="src/img/logos/${data.favTeamMatches[nextFixture].homeTeam.id}.svg"></div>${data.teams[homeTeam].tla}</div>
+    <div class="next-match-text">NEXT MATCH</div>
+    <div class="next-match-team">${data.teams[awayTeam].tla}<div class="team-crest"><img src="src/img/logos/${data.favTeamMatches[nextFixture].awayTeam.id}.svg"></div></div>
+</div>
+<div class="next-match-timer">
+<div class="next-match-countdown">
+</div>
+<div class="next-match-date">
+${time} ${day}.${month}
+</div>
+</div>
+`;
+document.querySelector('.next-match').insertAdjacentHTML('beforeend',markup);
+const endDate = new Date(data.favTeamMatches[nextFixture].utcDate).getTime();
+var timer = setInterval(() => {
+    let now = new Date().getTime(); 
+    let t = endDate - now; 
+    if (t >= 0) {
+
+        let days = Math.floor(t / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let mins = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+        let secs = Math.floor((t % (1000 * 60)) / 1000);
+        document.querySelector('.next-match-countdown').innerHTML = "";
+        const timer = `${days}D ${hours}H:${mins}M:${secs}S`
+        document.querySelector('.next-match-countdown').insertAdjacentHTML('beforeend',timer);
+
+    }
+}, 1000);
 }

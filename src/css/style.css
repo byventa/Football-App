@@ -181,7 +181,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .league-standings { 
     grid-area: league-standings;
-    padding-bottom: 2em;
+    margin-bottom: 5%;
     height: 100%;
     overflow: scroll;
     max-height: 330px;
@@ -285,11 +285,76 @@ input[type="search"]::-webkit-search-cancel-button {
    .match__score{
     font-size: 2.75em;
     font-weight: 700;
+    background-color:#36003c;
+    color: white;
+    padding: 0.2em;
    }
    .match__team-name{
     font-size: 1.5em;
+    padding: 0 1em 0 1em;
    }
-  .next-match { grid-area: next-match; }
+  .next-match { 
+    margin: 5%;
+    
+    grid-area: next-match;
+    background-color:#00a652;
+    display: grid;
+    grid-template-rows: 1fr 0.3fr 0.2fr;
+    color:white;
+    text-align: center;
+    padding-top: 3%;
+   }
+   .next-match-imgs{
+     display: grid;
+     grid-template-columns: 1fr 1fr ;
+     align-items: end;
+   }
+   .next-match-img img{
+
+    vertical-align: bottom; 
+   }
+   .next-match-info{
+     background-color: #36003c;
+     display: grid;
+     grid-template-columns: 1fr 1fr 1fr;
+     align-items: center;
+     padding: 2.5%;
+   }
+   .next-match-team{
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5em;
+    font-weight: 800;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+   }
+   .next-match-team img{
+     height: 2em;
+     vertical-align: middle;
+   }
+   .next-match-text{
+    font-family: 'Poppins', sans-serif;
+    font-size: 3em;
+    font-weight: 800;
+    line-height: 1em;
+    padding: 0 1em 0 1em;
+   }
+   .next-match-timer{
+    display: grid;
+    grid-template-rows: 1fr 0.5fr;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    align-items: center;
+    line-height: 3em;
+    padding:3% 2.5% 1.5% 2.5%;
+
+   }
+   .next-match-countdown{
+    font-size: 2.5em;
+   }
+   .next-match-date{
+     font-size:1.5em;
+   }
   
   .matches-area {
     display: grid;

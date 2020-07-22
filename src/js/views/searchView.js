@@ -1,9 +1,9 @@
-
+import {dataFormat} from './base'
 
 export const renderSearch = (searchValue, obj) =>{
 const search = searchValue;
 const format = search.replace(/[^a-zA-Z]+/g, ' ').toLowerCase();
-const teams = ['leicester','manchester city','manchester united','liverpool','west ham','bournemouth','watford','brighton','crystal palace','southampton','everton','burnley','sheffield','tottenham','wolv','newcastle','norwich','aston villa','arsenal','chelsea']
+const teams = ['leicester','manchester city','manchester united','liverpool','west ham','bou','watford','brighton','crystal palace','southampton','everton','burnley','sheffield','tottenham','wolv','newcastle','norwich','villa','arsenal','chelsea']
 const twoTeams = teams.filter(el => format.includes(el));
 twoTeams.sort((a, b) => format.indexOf(a) - format.indexOf(b));
 const finalTwoTeams = twoTeams.splice(0,2);

@@ -25,7 +25,8 @@ const viewController = async ()=>{
         await data.league.getMatchesData();
         teamView.renderTeamView(data.league);
         data.league.table.forEach(el => teamView.renderStandings(el,data.league.teamID));
-       let timeout = null;
+        
+        let timeout = null;
         document.querySelector('.search-bar').addEventListener('keyup',e=>{
             let value = document.querySelector('.search-bar').value
             clearTimeout(timeout);
@@ -34,6 +35,7 @@ const viewController = async ()=>{
                 searchView.renderSearch(value,data.league);
             }, 700);
         })
+        teamView.nextMatch(data.league);
 
     }else if(!data.league.teamID){
         await chooseView.renderHTML();
