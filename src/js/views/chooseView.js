@@ -17,7 +17,7 @@ export const renderHTML = ()=>{
        <div class="swiper-button-prev"></div>
    </div>
    <div class="select__container">
-       <button class="select__button" data-id="57" data-team="ARS">I'am a Gooner</button>
+       <button class="select__button" data-id="57" data-team="ARS" data-teamFullName="Arsenal FC">I'am a Gooner</button>
    </div>
 </div>`;
 elements.root.innerHTML = markup;

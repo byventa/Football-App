@@ -4,7 +4,7 @@ import LeagueData from './js/models/LeagueData';
 import * as chooseView from  './js/views/chooseView';
 import * as teamView from  './js/views/teamView';
 import * as searchView from  './js/views/searchView';
-import {fans, cleanHTML, elements} from './js/views/base';
+import {fans, cleanHTML} from './js/views/base';
 // GLOBAL VARIABLES
 const data = {};
 window.i = data;
@@ -13,40 +13,31 @@ window.i = data;
 const logicController = async () =>{
     // Get data from API
     data.league = new LeagueData ('PL')
-    await data.league.getLeagueData();
-    data.league.readStorage();
-    await data.league.getLeagueStandings();
+    data.league.getLeagueData();
+    data.league.getLeagueStandings();
     data.league.getTopScorers();
+    data.league.readStorage();
+ 
+    await data.league.getMatchesData();
 };
 
 const viewController = async ()=>{
     await logicController();
     if(data.league.teamID){
-        await data.league.getMatchesData();
         teamView.renderTeamView(data.league);
-        data.league.table.forEach(el => teamView.renderStandings(el,data.league.teamID));
-        
         let timeout = null;
         document.querySelector('.search-bar').addEventListener('keyup',e=>{
             let value = document.querySelector('.search-bar').value
             clearTimeout(timeout);
-            timeout = setTimeout(function () {
+            timeout = setTimeout(() => {
                 cleanHTML(document.querySelector('.search-dynamic-results'));;
                 searchView.renderSearch(value,data.league);
             }, 700);
         })
-        teamView.nextMatch(data.league);
 
     }else if(!data.league.teamID){
         await chooseView.renderHTML();
         loadChooseView();
-        document.querySelector('.select__button').addEventListener('click',()=>{
-            data.league.chooseTeam();
-            data.league.getMatchesData();
-            cleanHTML(document.getElementById('root'));
-            teamView.renderTeamView(data.league);
-            data.league.table.forEach(el => teamView.renderStandings(el));
-        })
     }
 }
 viewController();
@@ -66,4 +57,12 @@ const loadChooseView = ()=>{
     })
     chooseView.hideNav();
     window.addEventListener('resize',chooseView.hideNav);
+    
+    document.querySelector('.select__button').addEventListener('click',()=>{
+        data.league.chooseTeam();
+        data.league.getMatchesData();
+        cleanHTML(document.getElementById('root'));
+        teamView.renderTeamView(data.league);
+        data.league.table.forEach(el => teamView.renderStandings(el));
+    })
 }

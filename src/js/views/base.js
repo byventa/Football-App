@@ -40,9 +40,3 @@ export const fans = {
     WHU:"I'am a Hammer",
     BOU:"I'am a Cherrie"
 }
-export const dataFormat= (match) =>{
-    const date = match.utcDate.replace('Z',"").split('T');
-    const time = date[1].slice(0,5);
-    const day = date[0].slice(8,10);
-    const month = date[0].slice(5,7);
-}

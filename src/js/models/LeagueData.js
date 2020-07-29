@@ -35,6 +35,8 @@ export default class LeagueData {
         let scorers = await resScorers.json();
         this.scorers = scorers;
     }
+
+    
     chooseTeam(){
         const favouriteTeam = document.querySelector('.select__button').getAttribute('data-team');
         const favouriteTeamFullName = document.querySelector('.select__button').getAttribute('data-teamFullName');

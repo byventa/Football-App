@@ -1,9 +1,8 @@
-import {dataFormat} from './base'
 
 export const renderSearch = (searchValue, obj) =>{
 const search = searchValue;
 const format = search.replace(/[^a-zA-Z]+/g, ' ').toLowerCase();
-const teams = ['leicester','manchester city','manchester united','liverpool','west ham','bou','watford','brighton','crystal palace','southampton','everton','burnley','sheffield','tottenham','wolv','newcastle','norwich','villa','arsenal','chelsea']
+const teams = ['lei','manchester city','manchester united','liv','west ham','bou','wat','brighton','crystal palace','sou','eve','bur','shef','tot','wolv','new','nor','vil','ars','chel']
 const twoTeams = teams.filter(el => format.includes(el));
 twoTeams.sort((a, b) => format.indexOf(a) - format.indexOf(b));
 const finalTwoTeams = twoTeams.splice(0,2);
@@ -17,12 +16,9 @@ obj.allMatches.forEach(el =>{
     }
 })
 searchArr.reverse();
-console.log(searchArr);
 searchArr.map(el =>{
-const date = el.utcDate.replace('Z',"").split('T');
-const time = date[1].slice(0,5);
-const day = date[0].slice(8,10);
-const month = date[0].slice(5,7);
+let date = new Date(el.utcDate);
+let minutes = date.getMinutes().toString();
 let score = `${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}`
 if(el.status === "SCHEDULED"){
     score = "TBD";
@@ -30,7 +26,10 @@ if(el.status === "SCHEDULED"){
 const markup = `
 <div class="fixture">
     <div class="match__date">
-        ${time} ${day}.${month}
+    MATCHDAY ${el.matchday}
+    </div> 
+    <div class="match__date">
+    ${date.getHours()}:${minutes.padStart(2,"0")} ${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}
     </div> 
     <div class="match">
         <div class="match__home-team">
