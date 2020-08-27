@@ -5,20 +5,23 @@ export const renderTeamView = (el) => {
         <div class="left">
         <div class="team-logo">
             <div class="circle">
-                <img src="src/img/logos/${el.teamID}.svg">
+            <img src="src/img/logos/${el.teamID}.svg">
             </div>
-                <h1>${el.favouriteTeamFullName}</h1>
+            <div class="league-info">
+            <h1>ENGLAND</h3>
+            <h3>${el.competition.name} ${el.season.startDate.substring(2, 4)}/${el.season.endDate.substring(2, 4)}</h3>
+            <h3>${el.favouriteTeamFullName}</h3>
+            </div>
         </div>
             <div class="league-standing-info">
-            
-                <div class="team-position"><p>Pos</p></div>
+                <div class="team-position"><p>POS</p></div>
                 <div class="team-position"></div>
-                <div class="team-name"><p>Club</p></div>
-                <div class="team-gamesplayed"><p>Pl</p></div>
+                <div class="team-name"><p>CLUB</p></div>
+                <div class="team-gamesplayed"><p>PL</p></div>
                 <div class="team-goaldiffrence"><p>GD</p></div>
-                <div class="team-points"><p>Pts</p></div>
+                <div class="team-points"><p>PTS</p></div>
             </div>
-        <div class="league-standings">
+        <div class="league-standings" id="standings">
         </div>
         </div>
         <div class="middle">
@@ -30,15 +33,22 @@ export const renderTeamView = (el) => {
                 </div>
             </div>
 
-            <div class="next-match"></div>
+            <div class="next-match" data-id=""></div>
             
             <div class="matches-area">
                 <div class="choose-matches">
-                    <div class="select">
+                    <div class="select-desktop">
+                      <button type="button" id="buttontarget" value="0" class="sd-button">All Games</button>
+                      <button type="button" id="buttontarget" value="1" class="sd-button">Scheduled</button>
+                      <button type="button" id="buttontarget" value="2" class="sd-button">Finished</button>
+                      <button type="button" id="buttontarget" value="3" class="sd-button">Postponed</button>
+                    </div>
+                    <div class="select-mobile">
                         <select id="target">
                         <option value="0">All Games</option>
                         <option value="1">Scheduled</option>
                         <option value="2">Finished</option>
+                        <option value="3">Postponed</option>
                         </select>
                         <div class="select_arrow">
                         </div>
@@ -53,21 +63,27 @@ export const renderTeamView = (el) => {
 
 
         <div class="right">
-            <div class="time-area">
-         
-            </div>
-            <div class="top-scorers">
-                <div class="player">
-                    <div class="position">Pos</div>
-                    <div class="team-crest">Club</div>
-                    <div class="player-name">Name</div>
-                    <div class="goals">Goals</div>
+            <div class="top-scorer-info">
+                    <div class="position">POS</div>
+                    <div class="team-crest">CLUB</div>
+                    <div class="player-name">NAME</div>
+                    <div class="goals">GOALS</div>
                 </div>
+            <div class="top-scorers">
             </div>
             <div class="twitter-feed">
         </div>
         </div>
     </div>
+    <div class="change-team-modal">
+    <div class="modal-content">
+    <div class="close-modal"></div>
+      <h1 class="select__heading">Your Favourite Team is ${el.favouriteTeamFullName}</h1>
+      <div class="team-logo-modal"> <img src="src/img/logos/${el.teamID}.svg"></div>
+      <h1 class="select__heading">Are you sure you want to change your favourite team ?</h1>
+        <button id="modalbutton" class="select__button" type="button">Change Favourite Team</button>
+    </div>
+  </div>
 </div>`;
 
   document.getElementById('root').insertAdjacentHTML('beforeend', markup);
@@ -89,80 +105,98 @@ export const renderStandings = (team, teamID) => {
     </div>
     `;
   document.querySelector('.league-standings').insertAdjacentHTML('beforeend', markup);
-  if (cssClass.includes('favouriteTeam') && document.querySelector('.favouriteTeam').getAttribute('data-teamposition') > 7) {
+  if (team.position === 20 && document.querySelector('.favouriteTeam').getAttribute('data-teamposition') > 7) {
     document.querySelector('.league-standings').scrollTop =
       200 + 50 * (document.querySelector('.favouriteTeam').getAttribute('data-teamposition') - 8);
   }
 };
-export const nextMatch = (data) => {
-  let nextFixture = data.favTeamMatches.findIndex((match) => match.status === 'SCHEDULED');
-  if (nextFixture === -1) {
-    nextFixture = 37;
+
+export const nextMatchId = (data) => {
+  if (data.favTeamMatches[0] === undefined) {
+    return -1;
+  } else {
+    let nextFixture = data.favTeamMatches.findIndex((match) => match.status === 'SCHEDULED');
+    if (nextFixture === -1) {
+      nextFixture = 37;
+    }
+    const matchId = data.favTeamMatches[nextFixture].id;
+    return matchId;
   }
-  const homeTeam = data.teams.findIndex((team) => team.name === data.favTeamMatches[nextFixture].homeTeam.name);
-  const awayTeam = data.teams.findIndex((team) => team.name === data.favTeamMatches[nextFixture].awayTeam.name);
-  let date = new Date(data.favTeamMatches[nextFixture].utcDate);
-  let minutes = date.getMinutes().toString();
-  const endDate = new Date(data.favTeamMatches[nextFixture].utcDate).getTime();
+};
 
-  let state;
+export const nextMatch = (data, matchid) => {
+  if (document.querySelector('.next-match').dataset.id !== matchid && matchid > -1) {
+    document.querySelector('.next-match').innerHTML = '';
+    document.querySelector('.next-match').dataset.id = matchid;
+    let match = data.allMatches.findIndex((el) => el.id === matchid);
+    let homeTeamIdx = data.teams.findIndex((el) => el.id === data.allMatches[match].homeTeam.id);
+    let awayTeamIdx = data.teams.findIndex((el) => el.id === data.allMatches[match].awayTeam.id);
+    const nextFixture = data.favTeamMatches.findIndex((match) => match.status === 'SCHEDULED');
 
-  var timer = setInterval(() => {
+    let date = new Date(data.allMatches[match].utcDate);
+    let minutes = date.getMinutes().toString();
+    const endDate = new Date(data.allMatches[match].utcDate).getTime();
     let now = new Date().getTime();
     let t = endDate - now;
+    let state = 'TBD';
     if (t >= 0) {
       let days = Math.floor(t / (1000 * 60 * 60 * 24));
       let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       let mins = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
       let secs = Math.floor((t % (1000 * 60)) / 1000);
-      document.querySelector('.next-match-countdown').textContent = '';
-      const timer = `${days}D ${hours}H:${mins}M:${secs}S`;
+      const timer = `${days}D ${hours}H:${mins}M`;
       state = timer;
-      document.querySelector('.next-match-countdown').insertAdjacentHTML('beforeend', timer);
-    } else {
+    } else if (t < 0 && t > -6000000) {
       state = 'LIVE';
-      clearInterval(timer);
+    } else {
+      state = 'FINISHED';
     }
-  }, 1000);
+    let score = 'NEXT MATCH';
+    if (matchid !== data.favTeamMatches[nextFixture].id) {
+      score = 'MATCH';
+    }
 
-  let score = 'NEXT MATCH';
+    if (data.allMatches[match].score.fullTime.homeTeam !== null && data.allMatches[match].score.fullTime.awayTeam !== null) {
+      score = `${data.allMatches[match].score.fullTime.homeTeam}:${data.allMatches[match].score.fullTime.awayTeam}`;
+      state = 'FINISHED';
+    }
+    const markup = `
+                  <div class="next-match-imgs">
+                      <div class="next-match-img"><img src="src/img/logos/pl-${data.allMatches[match].homeTeam.id}.png">
+                      </div>
+                      <div class="next-match-img"><img src="src/img/logos/pl-${data.allMatches[match].awayTeam.id}.png">
+                      </div>
+                  </div>
+                  <div class="next-match-info">
+                      <div class="next-match-team"><div class="team-crest"><img src="src/img/logos/${data.allMatches[match].homeTeam.id}.svg"></div>
+                  ${data.teams[homeTeamIdx].tla}
+                  </div>
+                      <div class="next-match-text">${score}</div>
+                      <div class="next-match-team">
+                      ${data.teams[awayTeamIdx].tla}
+                      <div class="team-crest"><img src="src/img/logos/${data.allMatches[match].awayTeam.id}.svg"></div></div>
+                  </div>
+                  <div class="next-match-timer">
+                  <div class="next-match-countdown">
+                  ${state}
+                  </div>
+                  <div class="next-match-date">
+                  MATCHDAY ${data.allMatches[match].matchday}
+                  </div>
+                  <div class="next-match-date">
+                  ${date.getHours()}:${minutes.padStart(2, '0')} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}
 
-  if (data.favTeamMatches[nextFixture].score.fullTime.homeTeam !== '' && data.favTeamMatches[nextFixture].score.fullTime.awayTeam !== '') {
-    score = `${data.favTeamMatches[nextFixture].score.fullTime.homeTeam}:${data.favTeamMatches[nextFixture].score.fullTime.awayTeam}`;
-    state = 'FINISHED';
+                  </div>
+                  </div>
+                  `;
+    document.querySelector('.next-match').insertAdjacentHTML('beforeend', markup);
+  } else if (document.querySelector('.next-match').dataset.id === matchid) {
+  } else {
+    const markup = `
+      <div class="no-results">Information that you are trying to get access to is not available at this moment.</div>
+    `;
+    document.querySelector('.next-match').insertAdjacentHTML('beforeend', markup);
   }
-
-  const markup = `
-  <div class="next-match-imgs">
-      <div class="next-match-img"><img src="src/img/logos/pl-${data.favTeamMatches[nextFixture].homeTeam.id}.png">
-      </div>
-      <div class="next-match-img"><img src="src/img/logos/pl-${data.favTeamMatches[nextFixture].awayTeam.id}.png">
-      </div>
-  </div>
-  <div class="next-match-info">
-      <div class="next-match-team"><div class="team-crest"><img src="src/img/logos/${data.favTeamMatches[nextFixture].homeTeam.id}.svg"></div>${
-    data.teams[homeTeam].tla
-  }</div>
-      <div class="next-match-text">${score}</div>
-      <div class="next-match-team">${data.teams[awayTeam].tla}<div class="team-crest"><img src="src/img/logos/${
-    data.favTeamMatches[nextFixture].awayTeam.id
-  }.svg"></div></div>
-  </div>
-  <div class="next-match-timer">
-  <div class="next-match-countdown">
-  ${state}
-  </div>
-  <div class="next-match-date">
-  MATCHDAY ${data.favTeamMatches[nextFixture].matchday}
-
-  </div>
-  <div class="next-match-date">
-  ${date.getHours()}:${minutes.padStart(2, '0')} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} 
-
-  </div>
-  </div>
-  `;
-  document.querySelector('.next-match').insertAdjacentHTML('beforeend', markup);
 };
 export const topScorers = (el, i, teamID) => {
   let cssClass = 'player';
@@ -187,26 +221,35 @@ export const topScorers = (el, i, teamID) => {
 export const renderFixtures = (el) => {
   let date = new Date(el.utcDate);
   let minutes = date.getMinutes().toString();
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let score = 'TBD';
+  let finalDay = `${date.getDate()} ${monthNames[date.getMonth()]}`;
+  let finalHour = `${date.getHours()}:${minutes.padStart(2, '0')} `;
+  if (el.score.fullTime.homeTeam !== null && el.score.fullTime.awayTeam !== null) {
+    score = `${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}`;
+  }
+  if (el.status === 'POSTPONED') {
+    finalDay = el.status;
+    finalHour = 'MATCH';
+  }
   const markup = `
-        <div class="fixture">
+        <div class="fixture" data-matchid="${el.id}">
         <div class="match__date">
-              MATCHDAY ${el.matchday}
-            </div> 
-            <div class="match__date">
-               ${date.getHours()}:${minutes.padStart(2, '0')} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} 
+             <div> ${finalHour}</div>
+             <div>${finalDay} </div>
             </div> 
             <div class="match">
-                <div class="match__home-team">
-                    <div class="match__home-team-logo">
+                <div class="match__team">
+                    <div class="match__team-logo">
                         <img src="src/img/logos/${el.homeTeam.id}.svg">
                     </div>
                     <div class="match__team-name">
                         ${el.homeTeam.name}
                     </div>
                 </div>
-                <div class="match__score">${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}</div>
-                <div class="match__away-team">
-                    <div class="match__away-team-logo">
+                <div class="match__score"><div class="match__matchday">Matchday ${el.matchday}</div><div>${score}</div></div>
+                <div class="match__team">
+                    <div class="match__team-logo">
                     <img src="src/img/logos/${el.awayTeam.id}.svg">
                     </div>
                     <div class="match__team-name">
@@ -240,6 +283,9 @@ export const loadTwitter = (teamID) => {
     [397, 'OfficialBHAFC?ref_src=twsrc%5Etfw'],
     [563, 'WestHam?ref_src=twsrc%5Etfw'],
     [1044, 'afcbournemouth?ref_src=twsrc%5Etfw'],
+    [63, 'FulhamFC?ref_src=twsrc%5Etfw'],
+    [74, 'WBA?ref_src=twsrc%5Etfw'],
+    [341, 'lufc?ref_src=twsrc%5Etfw'],
   ]);
   const markup = `<a class="twitter-timeline" data-dnt="true" data-theme="light" href="https://twitter.com/${twitterLinks.get(teamID)}"></a>`;
   document.querySelector('.twitter-feed').insertAdjacentHTML('beforeend', markup);

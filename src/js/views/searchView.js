@@ -22,6 +22,9 @@ export const renderSearch = (searchValue, obj) => {
     'vil',
     'ars',
     'chel',
+    'ful',
+    'west bromwich',
+    'leeds',
   ];
   const twoTeams = teams.filter((el) => format.includes(el));
   twoTeams.sort((a, b) => format.indexOf(a) - format.indexOf(b));
@@ -41,38 +44,43 @@ export const renderSearch = (searchValue, obj) => {
   searchArr.map((el) => {
     let date = new Date(el.utcDate);
     let minutes = date.getMinutes().toString();
-    let score = `${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}`;
-    if (el.status === 'SCHEDULED') {
-      score = 'TBD';
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let score = 'TBD';
+    let finalDay = `${date.getDate()} ${monthNames[date.getMonth()]}`;
+    let finalHour = `${date.getHours()}:${minutes.padStart(2, '0')} `;
+    if (el.score.fullTime.homeTeam !== null && el.score.fullTime.awayTeam !== null) {
+      score = `${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}`;
+    }
+    if (el.status === 'POSTPONED') {
+      finalDay = el.status;
+      finalHour = 'MATCH';
     }
     const markup = `
-<div class="fixture">
+    <div class="fixture" data-matchid="${el.id}">
     <div class="match__date">
-    MATCHDAY ${el.matchday}
-    </div> 
-    <div class="match__date">
-    ${date.getHours()}:${minutes.padStart(2, '0')} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}
-    </div> 
-    <div class="match">
-        <div class="match__home-team">
-            <div class="match__home-team-logo">
-                <img src="src/img/logos/${el.homeTeam.id}.svg">
+         <div> ${finalHour}</div>
+         <div>${finalDay} </div>
+        </div> 
+        <div class="match">
+            <div class="match__team">
+                <div class="match__team-logo">
+                    <img src="src/img/logos/${el.homeTeam.id}.svg">
+                </div>
+                <div class="match__team-name">
+                    ${el.homeTeam.name}
+                </div>
             </div>
-            <div class="match__team-name">
-                ${el.homeTeam.name}
-            </div>
-        </div>
-        <div class="match__score">${score}</div>
-        <div class="match__away-team">
-            <div class="match__away-team-logo">
-            <img src="src/img/logos/${el.awayTeam.id}.svg">
-            </div>
-            <div class="match__team-name">
-                ${el.awayTeam.name}
+            <div class="match__score"><div class="match__matchday">Matchday ${el.matchday}</div><div>${score}</div></div>
+            <div class="match__team">
+                <div class="match__team-logo">
+                <img src="src/img/logos/${el.awayTeam.id}.svg">
+                </div>
+                <div class="match__team-name">
+                    ${el.awayTeam.name}
+                </div>
             </div>
         </div>
     </div>
-</div>
 `;
     document.querySelector('.search-dynamic-results').insertAdjacentHTML('beforeend', markup);
   });

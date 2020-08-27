@@ -39,4 +39,13 @@ export const fans = {
   BHA: "I'am a Seagull",
   WHU: "I'am a Hammer",
   BOU: "I'am a Cherrie",
+  LEE: "I'am a White",
+  WBA: "I'am a Baggie",
+  FUL: "I'am a Cottager",
+};
+export const loaders = (el) => {
+  const markup = `<div class="lds-ring"><div></div><div></div><div></div><div></div></div>`;
+  el.forEach((el2) => {
+    document.querySelector(`.${el2}`).insertAdjacentHTML('beforeend', markup);
+  });
 };
