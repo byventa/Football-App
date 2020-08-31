@@ -43,6 +43,7 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.css$/,
+        sideEffects: true,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
