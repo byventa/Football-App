@@ -1,31 +1,25 @@
 module.exports = {
   entry: {
-    main: "./src/index.js",
-    vendor: "./src/vendor.js",
+    main: './src/index.js',
+    vendor: './src/vendor.js',
   },
   module: {
     rules: [
       {
         test: /\.html$/,
-        use: ["html-loader"],
+        use: ['html-loader'],
       },
       {
-        test: /\.(svg|png|jpg|gif)$/,
-        use: {
-          loader: "file-loader?name=/src/img/logos/[name].[ext]",
-          options: {
-            name: "[name].[ext]",
-            outputPath: "img",
-          },
-        },
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: 'file-loader?name=/src/img/[name].[ext]',
       },
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env"],
+            presets: ['@babel/preset-env'],
           },
         },
       },

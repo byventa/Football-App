@@ -64,7 +64,7 @@ export const renderSearch = (searchValue, obj) => {
         <div class="match">
             <div class="match__team">
                 <div class="match__team-logo">
-                    <img src="src/img/logos/${el.homeTeam.id}.svg">
+                    <img src="src/img/${el.homeTeam.id}.svg">
                 </div>
                 <div class="match__team-name">
                     ${el.homeTeam.name}
@@ -73,7 +73,7 @@ export const renderSearch = (searchValue, obj) => {
             <div class="match__score"><div class="match__matchday">Matchday ${el.matchday}</div><div>${score}</div></div>
             <div class="match__team">
                 <div class="match__team-logo">
-                <img src="src/img/logos/${el.awayTeam.id}.svg">
+                <img src="src/img/${el.awayTeam.id}.svg">
                 </div>
                 <div class="match__team-name">
                     ${el.awayTeam.name}

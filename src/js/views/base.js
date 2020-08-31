@@ -44,8 +44,11 @@ export const fans = {
   FUL: "I'am a Cottager",
 };
 export const loaders = (el) => {
-  const markup = `<div class="lds-ring"><div></div><div></div><div></div><div></div></div>`;
-  el.forEach((el2) => {
+  const loaderSections = ['League Standings', 'Next Match', 'Fixtures', 'Top Scorers', 'Twitter'];
+  el.forEach((el2, i) => {
+    const markup = `<div class="loader"><div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    <h2>Loading ${loaderSections[i]}</h2></div>
+    `;
     document.querySelector(`.${el2}`).insertAdjacentHTML('beforeend', markup);
   });
 };

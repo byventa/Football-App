@@ -1,48 +1,75 @@
+import { elements } from '../views/base';
+
 export default class LeagueData {
   constructor(query) {
     this.query = query;
   }
   async getLeagueData() {
-    let resleague = await fetch(`http://api.football-data.org/v2/competitions/${this.query}/teams`, {
+    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/teams`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
-    });
-    let league = await resleague.json();
-    this.teams = league.teams;
-    this.season = league.season;
-    this.competition = league.competition;
-    sessionStorage.setItem('teams', JSON.stringify(this.teams));
-    sessionStorage.setItem('season', JSON.stringify(this.season));
-    sessionStorage.setItem('competition', JSON.stringify(this.competition));
+    })
+      .then(handleErrors)
+      .then((data) => {
+        this.teams = data.teams;
+        this.season = data.season;
+        this.competition = data.competition;
+
+        sessionStorage.setItem('teams', JSON.stringify(this.teams));
+        sessionStorage.setItem('season', JSON.stringify(this.season));
+        sessionStorage.setItem('competition', JSON.stringify(this.competition));
+      })
+      .catch(ifErrorHappened)
+      .finally((this.teams = null), (this.season = null), (this.competition = null));
   }
   async getMatchesData() {
-    let resMatches = await fetch(`http://api.football-data.org/v2/competitions/${this.query}/matches`, {
+    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/matches`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
-    });
-    let matches = await resMatches.json();
-    this.allMatches = matches.matches;
-    this.favTeamMatches = matches.matches.filter((el) => {
-      if (el.awayTeam.id === this.teamID || el.homeTeam.id === this.teamID) {
-        return el;
-      }
-    });
-    sessionStorage.setItem('allMatches', JSON.stringify(this.allMatches));
-    sessionStorage.setItem('favTeamMatches', JSON.stringify(this.favTeamMatches));
+    })
+      .then(handleErrors)
+      .then((data) => {
+        this.allMatches = data.matches;
+        this.favTeamMatches = this.allMatches.filter((el) => {
+          if (el.awayTeam.id === this.teamID || el.homeTeam.id === this.teamID) {
+            return el;
+          }
+        });
+
+        sessionStorage.setItem('allMatches', JSON.stringify(this.allMatches));
+        sessionStorage.setItem('favTeamMatches', JSON.stringify(this.favTeamMatches));
+      })
+      .catch(ifErrorHappened)
+      .finally(((this.allMatches = [-1]), (this.favTeamMatches = [undefined])));
   }
   async getLeagueStandings() {
-    let resStandings = await fetch(`http://api.football-data.org/v2/competitions/${this.query}/standings`, {
+    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/standings`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
-    });
-    let standings = await resStandings.json();
-    this.table = standings.standings[0].table;
-    sessionStorage.setItem('table', JSON.stringify(this.table));
+    })
+      .then(handleErrors)
+      .then((data) => {
+        this.table = data.standings[0].table;
+        sessionStorage.setItem('table', JSON.stringify(this.table));
+      })
+      .catch(ifErrorHappened)
+      .finally((this.table = [-1]));
   }
   async getTopScorers() {
-    let resScorers = await fetch(`http://api.football-data.org/v2/competitions/${this.query}/scorers`, {
+    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/scorers`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
-    });
-    let scorers = await resScorers.json();
-    this.scorers = scorers;
-    sessionStorage.setItem('scorers', JSON.stringify(this.scorers));
+    })
+      .then(handleErrors)
+      .then((data) => {
+        this.scorers = data;
+        if (this.scorers.scorers.length < 1) {
+          this.scorers.scorers = [null];
+        }
+        sessionStorage.setItem('scorers', JSON.stringify(this.scorers));
+      })
+      .catch(ifErrorHappened)
+      .finally(
+        (this.scorers = {
+          scorers: [-1],
+        })
+      );
   }
 
   chooseTeam() {
@@ -52,22 +79,59 @@ export default class LeagueData {
     this.favouriteTeamFullName = favouriteTeamFullName;
     const teamID = this.teams.findIndex((team) => team.tla == favouriteTeam);
     this.teamID = parseInt(this.teams[parseInt(teamID)].id);
+    localStorage.setItem('favouriteTeam', this.favouriteTeam);
     localStorage.setItem('teamID', this.teamID);
     localStorage.setItem('favouriteTeamFullName', this.favouriteTeamFullName);
   }
   readStorage() {
-    // LOCAL STORAGE
+    // LOCAL STORAGEc
     const storageID = localStorage.getItem('teamID');
     const storageFullName = localStorage.getItem('favouriteTeamFullName');
+    const favTeamTla = localStorage.getItem('favouriteTeam');
     this.teamID = parseInt(storageID);
     this.favouriteTeamFullName = storageFullName;
+    this.favouriteTeam = favTeamTla;
     // SESION STORAGE
-    this.teams = JSON.parse(sessionStorage.getItem('teams'));
-    this.season = JSON.parse(sessionStorage.getItem('season'));
-    this.competition = JSON.parse(sessionStorage.getItem('competition'));
-    this.allMatches = JSON.parse(sessionStorage.getItem('allMatches'));
-    this.favTeamMatches = JSON.parse(sessionStorage.getItem('favTeamMatches'));
-    this.table = JSON.parse(sessionStorage.getItem('table'));
-    this.scorers = JSON.parse(sessionStorage.getItem('scorers'));
+    if (JSON.parse(sessionStorage.getItem('teams')) !== null) {
+      this.teams = JSON.parse(sessionStorage.getItem('teams'));
+    }
+    if (JSON.parse(sessionStorage.getItem('season')) !== null) {
+      this.season = JSON.parse(sessionStorage.getItem('season'));
+    }
+    if (JSON.parse(sessionStorage.getItem('competition')) !== null) {
+      this.competition = JSON.parse(sessionStorage.getItem('competition'));
+    }
+    if (JSON.parse(sessionStorage.getItem('table')) !== null && JSON.parse(sessionStorage.getItem('table'))[0] !== -1) {
+      this.table = JSON.parse(sessionStorage.getItem('table'));
+    }
+    if (
+      JSON.parse(sessionStorage.getItem('scorers')) !== null &&
+      JSON.parse(sessionStorage.getItem('scorers')) !== 'null' &&
+      JSON.parse(sessionStorage.getItem('scorers')).scorers.length > 1
+    ) {
+      this.scorers = JSON.parse(sessionStorage.getItem('scorers'));
+    }
+    if (JSON.parse(sessionStorage.getItem('allMatches')) !== null && JSON.parse(sessionStorage.getItem('allMatches'))[0] !== -1) {
+      this.allMatches = JSON.parse(sessionStorage.getItem('allMatches'));
+    }
+    if (JSON.parse(sessionStorage.getItem('favTeamMatches')) !== null && JSON.parse(sessionStorage.getItem('favTeamMatches')) !== 'null') {
+      this.favTeamMatches = JSON.parse(sessionStorage.getItem('favTeamMatches'));
+    }
+  }
+}
+
+function handleErrors(response) {
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw Error(response.status);
+  }
+}
+function ifErrorHappened(error) {
+  const errorStatus = error.toString().replace(/\D/g, '');
+  if (errorStatus == 429) {
+    console.log(`Too many request wait 60s and then try refreshing the page.`);
+  } else {
+    console.log(`${error}  Try refreshing the page.`);
   }
 }

@@ -27,7 +27,7 @@ export const renderTeams = (team, place) => {
   const markup = `
 <div class="swiper-slide" style="background-color:#36003C" data-id="${team.id}" data-team="${team.tla}" data-teamFullName="${team.name}">
     <div class="slide-link">
-        <img src="src/img/logos/${team.id}.svg" style ="width:auto; height:20vw;">
+        <img src="src/img/${team.id}.svg" style ="width:auto; height:20vw;">
         <h2>${team.name}</h2>
     </div>
 </div>`;
@@ -45,17 +45,4 @@ export const initSlider = () => {
       prevEl: '.swiper-button-prev',
     },
   });
-};
-
-// Hide arrows in swiper
-export const hideNav = () => {
-  if (window.innerWidth < 900) {
-    console.log(document.querySelector('.swiper-button-next').style.display);
-    document.querySelector('.swiper-button-next').style.display = 'none';
-    document.querySelector('.swiper-button-prev').style.display = 'none';
-  } else if (window.innerWidth > 900) {
-    console.log(document.querySelector('.swiper-button-next').style.display);
-    document.querySelector('.swiper-button-next').style.display = 'flex';
-    document.querySelector('.swiper-button-prev').style.display = 'flex';
-  }
 };

@@ -1,11 +1,21 @@
 export const renderTeamView = (el) => {
-  const markup = `
+  let markup;
+  if (el.teams === null || el.season === null || el.competition === null) {
+    markup = `<div class="no-results white"><img src="src/img/PLLOGO.svg"> Too many request wait couple of seconds and then refresh the page.
+    </div>
+    `;
+    setInterval(function () {
+      window.location.reload(1);
+    }, 60000);
+    document.getElementById('root').insertAdjacentHTML('beforeend', markup);
+  } else {
+    markup = `
 <div class="teamView-container">
     <div class="grid-container">
         <div class="left">
         <div class="team-logo">
             <div class="circle">
-            <img src="src/img/logos/${el.teamID}.svg">
+            <img src="src/img/${el.teamID}.svg">
             </div>
             <div class="league-info">
             <h1>ENGLAND</h3>
@@ -22,6 +32,7 @@ export const renderTeamView = (el) => {
                 <div class="team-points"><p>PTS</p></div>
             </div>
         <div class="league-standings" id="standings">
+
         </div>
         </div>
         <div class="middle">
@@ -33,15 +44,19 @@ export const renderTeamView = (el) => {
                 </div>
             </div>
 
-            <div class="next-match" data-id=""></div>
+            <div class="next-match" data-id="">
+
+            </div>
             
             <div class="matches-area">
                 <div class="choose-matches">
                     <div class="select-desktop">
-                      <button type="button" id="buttontarget" value="0" class="sd-button">All Games</button>
+                      <button type="button" id="buttontarget" value="0" class="sd-button">All Fixtures</button>
                       <button type="button" id="buttontarget" value="1" class="sd-button">Scheduled</button>
                       <button type="button" id="buttontarget" value="2" class="sd-button">Finished</button>
                       <button type="button" id="buttontarget" value="3" class="sd-button">Postponed</button>
+                      <button type="button" id="buttontarget" value="4" class="sd-button">${el.favouriteTeam} Fixtures</button>
+
                     </div>
                     <div class="select-mobile">
                         <select id="target">
@@ -49,6 +64,7 @@ export const renderTeamView = (el) => {
                         <option value="1">Scheduled</option>
                         <option value="2">Finished</option>
                         <option value="3">Postponed</option>
+                        <option value="4">${el.favouriteTeamFullName}</option>
                         </select>
                         <div class="select_arrow">
                         </div>
@@ -79,41 +95,50 @@ export const renderTeamView = (el) => {
     <div class="modal-content">
     <div class="close-modal"></div>
       <h1 class="select__heading">Your Favourite Team is ${el.favouriteTeamFullName}</h1>
-      <div class="team-logo-modal"> <img src="src/img/logos/${el.teamID}.svg"></div>
+      <div class="team-logo-modal"> <img src="src/img/${el.teamID}.svg"></div>
       <h1 class="select__heading">Are you sure you want to change your favourite team ?</h1>
         <button id="modalbutton" class="select__button" type="button">Change Favourite Team</button>
     </div>
   </div>
 </div>`;
-
-  document.getElementById('root').insertAdjacentHTML('beforeend', markup);
+    document.getElementById('root').insertAdjacentHTML('beforeend', markup);
+  }
 };
 
 export const renderStandings = (team, teamID) => {
-  let cssClass = 'team-standing';
-  if (team.team.id === teamID) {
-    cssClass = 'team-standing  favouriteTeam';
-  }
-  const markup = `
+  if (team === -1) {
+    const markup = `
+    <div class="no-results">Too many request wait couple of seconds and then refresh the page.</div>
+  `;
+    document.querySelector('.league-standings').insertAdjacentHTML('beforeend', markup);
+  } else {
+    let cssClass = 'team-standing';
+    if (team.team.id === teamID) {
+      cssClass = 'team-standing  favouriteTeam';
+    }
+    const markup = `
     <div class="${cssClass}" data-teamID="${team.team.id}" data-teamPosition="${team.position}">
         <div class="team-position"><p>${team.position}</p></div>
-        <div class="team-crest"><img src="src/img/logos/${team.team.id}.svg"></div>
+        <div class="team-crest"><img src="src/img/${team.team.id}.svg"></div>
         <div class="team-name"><p>${team.team.name}</p></div>
         <div class="team-gamesplayed"><p>${team.playedGames}</p></div>
         <div class="team-goaldiffrence"><p>${team.goalDifference}</p></div>
         <div class="team-points"><p>${team.points}</p></div>
     </div>
     `;
-  document.querySelector('.league-standings').insertAdjacentHTML('beforeend', markup);
-  if (team.position === 20 && document.querySelector('.favouriteTeam').getAttribute('data-teamposition') > 7) {
-    document.querySelector('.league-standings').scrollTop =
-      200 + 50 * (document.querySelector('.favouriteTeam').getAttribute('data-teamposition') - 8);
+    document.querySelector('.league-standings').insertAdjacentHTML('beforeend', markup);
+    if (team.position === 20 && document.querySelector('.favouriteTeam').getAttribute('data-teamposition') > 7) {
+      document.querySelector('.league-standings').scrollTop =
+        200 + 50 * (document.querySelector('.favouriteTeam').getAttribute('data-teamposition') - 8);
+    }
   }
 };
 
 export const nextMatchId = (data) => {
-  if (data.favTeamMatches[0] === undefined) {
-    return -1;
+  if (data.favTeamMatches.length < 1) {
+    return undefined;
+  } else if (data.favTeamMatches.length === 1) {
+    return null;
   } else {
     let nextFixture = data.favTeamMatches.findIndex((match) => match.status === 'SCHEDULED');
     if (nextFixture === -1) {
@@ -125,7 +150,7 @@ export const nextMatchId = (data) => {
 };
 
 export const nextMatch = (data, matchid) => {
-  if (document.querySelector('.next-match').dataset.id !== matchid && matchid > -1) {
+  if (document.querySelector('.next-match').dataset.id !== matchid && matchid > 1 && matchid !== undefined && matchid !== null) {
     document.querySelector('.next-match').innerHTML = '';
     document.querySelector('.next-match').dataset.id = matchid;
     let match = data.allMatches.findIndex((el) => el.id === matchid);
@@ -162,19 +187,19 @@ export const nextMatch = (data, matchid) => {
     }
     const markup = `
                   <div class="next-match-imgs">
-                      <div class="next-match-img"><img src="src/img/logos/pl-${data.allMatches[match].homeTeam.id}.png">
+                      <div class="next-match-img"><img src="src/img/pl-${data.allMatches[match].homeTeam.id}.png">
                       </div>
-                      <div class="next-match-img"><img src="src/img/logos/pl-${data.allMatches[match].awayTeam.id}.png">
+                      <div class="next-match-img"><img src="src/img/pl-${data.allMatches[match].awayTeam.id}.png">
                       </div>
                   </div>
                   <div class="next-match-info">
-                      <div class="next-match-team"><div class="team-crest"><img src="src/img/logos/${data.allMatches[match].homeTeam.id}.svg"></div>
+                      <div class="next-match-team"><div class="team-crest"><img src="src/img/${data.allMatches[match].homeTeam.id}.svg"></div>
                   ${data.teams[homeTeamIdx].tla}
                   </div>
                       <div class="next-match-text">${score}</div>
                       <div class="next-match-team">
                       ${data.teams[awayTeamIdx].tla}
-                      <div class="team-crest"><img src="src/img/logos/${data.allMatches[match].awayTeam.id}.svg"></div></div>
+                      <div class="team-crest"><img src="src/img/${data.allMatches[match].awayTeam.id}.svg"></div></div>
                   </div>
                   <div class="next-match-timer">
                   <div class="next-match-countdown">
@@ -190,49 +215,66 @@ export const nextMatch = (data, matchid) => {
                   </div>
                   `;
     document.querySelector('.next-match').insertAdjacentHTML('beforeend', markup);
-  } else if (document.querySelector('.next-match').dataset.id === matchid) {
+  } else if (matchid === null) {
+    const markup = `
+      <div class="no-results">Too many request wait couple of seconds and then refresh the page.</div>
+    `;
+    document.querySelector('.next-match').insertAdjacentHTML('beforeend', markup);
   } else {
     const markup = `
-      <div class="no-results">Information that you are trying to get access to is not available at this moment.</div>
-    `;
+    <div class="no-results">Information that you are trying to get access to is not available at this moment.</div>
+  `;
     document.querySelector('.next-match').insertAdjacentHTML('beforeend', markup);
   }
 };
 export const topScorers = (el, i, teamID) => {
-  let cssClass = 'player';
-  if (el.team.id === teamID) {
-    cssClass = 'player  favouriteTeam';
+  let markup;
+  if (el === -1) {
+    markup = `
+     <div class="no-results">Too many request wait couple of seconds and then refresh the page.</div>
+     `;
+  } else if (el === null) {
+    markup = `
+    <div class="no-results">Information that you are trying to get access to is not available at this moment.</div>
+     `;
+  } else {
+    let cssClass = 'player';
+    if (el.team.id === teamID) {
+      cssClass = 'player  favouriteTeam';
+    }
+    let topScorer = '';
+    if (i === 0) {
+      topScorer = 'topScorer';
+    }
+    markup = `
+      <div class="${cssClass} ${topScorer}">
+          <div class="position">${i + 1}</div>
+          <div class="team-crest"><img src="src/img/${el.team.id}.svg"></div>
+          <div class="player-name">${el.player.name}</div>
+          <div class="goals">${el.numberOfGoals}</div>
+      </div>
+      `;
   }
-  let topScorer = '';
-  if (i === 0) {
-    topScorer = 'topScorer';
-  }
-  const markup = `
-    <div class="${cssClass} ${topScorer}">
-        <div class="position">${i + 1}</div>
-        <div class="team-crest"><img src="src/img/logos/${el.team.id}.svg"></div>
-        <div class="player-name">${el.player.name}</div>
-        <div class="goals">${el.numberOfGoals}</div>
-    </div>
-    `;
   document.querySelector('.top-scorers').insertAdjacentHTML('beforeend', markup);
 };
 
 export const renderFixtures = (el) => {
-  let date = new Date(el.utcDate);
-  let minutes = date.getMinutes().toString();
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  let score = 'TBD';
-  let finalDay = `${date.getDate()} ${monthNames[date.getMonth()]}`;
-  let finalHour = `${date.getHours()}:${minutes.padStart(2, '0')} `;
-  if (el.score.fullTime.homeTeam !== null && el.score.fullTime.awayTeam !== null) {
-    score = `${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}`;
-  }
-  if (el.status === 'POSTPONED') {
-    finalDay = el.status;
-    finalHour = 'MATCH';
-  }
-  const markup = `
+  if (el === -1) {
+  } else {
+    let date = new Date(el.utcDate);
+    let minutes = date.getMinutes().toString();
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let score = 'TBD';
+    let finalDay = `${date.getDate()} ${monthNames[date.getMonth()]}`;
+    let finalHour = `${date.getHours()}:${minutes.padStart(2, '0')} `;
+    if (el.score.fullTime.homeTeam !== null && el.score.fullTime.awayTeam !== null) {
+      score = `${el.score.fullTime.homeTeam}:${el.score.fullTime.awayTeam}`;
+    }
+    if (el.status === 'POSTPONED') {
+      finalDay = el.status;
+      finalHour = 'MATCH';
+    }
+    const markup = `
         <div class="fixture" data-matchid="${el.id}">
         <div class="match__date">
              <div> ${finalHour}</div>
@@ -241,7 +283,7 @@ export const renderFixtures = (el) => {
             <div class="match">
                 <div class="match__team">
                     <div class="match__team-logo">
-                        <img src="src/img/logos/${el.homeTeam.id}.svg">
+                        <img src="src/img/${el.homeTeam.id}.svg">
                     </div>
                     <div class="match__team-name">
                         ${el.homeTeam.name}
@@ -250,7 +292,7 @@ export const renderFixtures = (el) => {
                 <div class="match__score"><div class="match__matchday">Matchday ${el.matchday}</div><div>${score}</div></div>
                 <div class="match__team">
                     <div class="match__team-logo">
-                    <img src="src/img/logos/${el.awayTeam.id}.svg">
+                    <img src="src/img/${el.awayTeam.id}.svg">
                     </div>
                     <div class="match__team-name">
                         ${el.awayTeam.name}
@@ -259,7 +301,8 @@ export const renderFixtures = (el) => {
             </div>
         </div>
         `;
-  document.querySelector('.fixtures').insertAdjacentHTML('beforeend', markup);
+    document.querySelector('.fixtures').insertAdjacentHTML('beforeend', markup);
+  }
 };
 export const loadTwitter = (teamID) => {
   const twitterLinks = new Map([
