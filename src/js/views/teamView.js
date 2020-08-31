@@ -1,7 +1,7 @@
 export const renderTeamView = (el) => {
   let markup;
   if (el.teams === null || el.season === null || el.competition === null) {
-    markup = `<div class="no-results white"><img src="src/img/PLLOGO.svg"> Too many request wait couple of seconds and then refresh the page.
+    markup = `<div class="no-results white"><img src="img/PLLOGO.svg"> Too many request wait couple of seconds and then refresh the page.
     </div>
     `;
     setInterval(function () {
@@ -15,7 +15,7 @@ export const renderTeamView = (el) => {
         <div class="left">
         <div class="team-logo">
             <div class="circle">
-            <img src="src/img/${el.teamID}.svg">
+            <img src="img/${el.teamID}.svg">
             </div>
             <div class="league-info">
             <h1>ENGLAND</h3>
@@ -95,7 +95,7 @@ export const renderTeamView = (el) => {
     <div class="modal-content">
     <div class="close-modal"></div>
       <h1 class="select__heading">Your Favourite Team is ${el.favouriteTeamFullName}</h1>
-      <div class="team-logo-modal"> <img src="src/img/${el.teamID}.svg"></div>
+      <div class="team-logo-modal"> <img src="img/${el.teamID}.svg"></div>
       <h1 class="select__heading">Are you sure you want to change your favourite team ?</h1>
         <button id="modalbutton" class="select__button" type="button">Change Favourite Team</button>
     </div>
@@ -119,7 +119,7 @@ export const renderStandings = (team, teamID) => {
     const markup = `
     <div class="${cssClass}" data-teamID="${team.team.id}" data-teamPosition="${team.position}">
         <div class="team-position"><p>${team.position}</p></div>
-        <div class="team-crest"><img src="src/img/${team.team.id}.svg"></div>
+        <div class="team-crest"><img src="img/${team.team.id}.svg"></div>
         <div class="team-name"><p>${team.team.name}</p></div>
         <div class="team-gamesplayed"><p>${team.playedGames}</p></div>
         <div class="team-goaldiffrence"><p>${team.goalDifference}</p></div>
@@ -187,19 +187,19 @@ export const nextMatch = (data, matchid) => {
     }
     const markup = `
                   <div class="next-match-imgs">
-                      <div class="next-match-img"><img src="src/img/pl-${data.allMatches[match].homeTeam.id}.png">
+                      <div class="next-match-img"><img src="img/pl-${data.allMatches[match].homeTeam.id}.png">
                       </div>
-                      <div class="next-match-img"><img src="src/img/pl-${data.allMatches[match].awayTeam.id}.png">
+                      <div class="next-match-img"><img src="img/pl-${data.allMatches[match].awayTeam.id}.png">
                       </div>
                   </div>
                   <div class="next-match-info">
-                      <div class="next-match-team"><div class="team-crest"><img src="src/img/${data.allMatches[match].homeTeam.id}.svg"></div>
+                      <div class="next-match-team"><div class="team-crest"><img src="img/${data.allMatches[match].homeTeam.id}.svg"></div>
                   ${data.teams[homeTeamIdx].tla}
                   </div>
                       <div class="next-match-text">${score}</div>
                       <div class="next-match-team">
                       ${data.teams[awayTeamIdx].tla}
-                      <div class="team-crest"><img src="src/img/${data.allMatches[match].awayTeam.id}.svg"></div></div>
+                      <div class="team-crest"><img src="img/${data.allMatches[match].awayTeam.id}.svg"></div></div>
                   </div>
                   <div class="next-match-timer">
                   <div class="next-match-countdown">
@@ -249,7 +249,7 @@ export const topScorers = (el, i, teamID) => {
     markup = `
       <div class="${cssClass} ${topScorer}">
           <div class="position">${i + 1}</div>
-          <div class="team-crest"><img src="src/img/${el.team.id}.svg"></div>
+          <div class="team-crest"><img src="img/${el.team.id}.svg"></div>
           <div class="player-name">${el.player.name}</div>
           <div class="goals">${el.numberOfGoals}</div>
       </div>
@@ -283,7 +283,7 @@ export const renderFixtures = (el) => {
             <div class="match">
                 <div class="match__team">
                     <div class="match__team-logo">
-                        <img src="src/img/${el.homeTeam.id}.svg">
+                        <img src="img/${el.homeTeam.id}.svg">
                     </div>
                     <div class="match__team-name">
                         ${el.homeTeam.name}
@@ -292,7 +292,7 @@ export const renderFixtures = (el) => {
                 <div class="match__score"><div class="match__matchday">Matchday ${el.matchday}</div><div>${score}</div></div>
                 <div class="match__team">
                     <div class="match__team-logo">
-                    <img src="src/img/${el.awayTeam.id}.svg">
+                    <img src="img/${el.awayTeam.id}.svg">
                     </div>
                     <div class="match__team-name">
                         ${el.awayTeam.name}

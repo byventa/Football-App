@@ -27,7 +27,7 @@ export const renderTeams = (team, place) => {
   const markup = `
 <div class="swiper-slide" style="background-color:#36003C" data-id="${team.id}" data-team="${team.tla}" data-teamFullName="${team.name}">
     <div class="slide-link">
-        <img src="src/img/${team.id}.svg" style ="width:auto; height:20vw;">
+        <img src="img/${team.id}.svg" style ="width:auto; height:20vw;">
         <h2>${team.name}</h2>
     </div>
 </div>`;
