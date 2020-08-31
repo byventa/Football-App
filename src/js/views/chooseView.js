@@ -1,5 +1,5 @@
 import { elements } from './base';
-import Swiper, { Navigation, Keyboard } from 'swiper';
+import { Swiper, Navigation, Keyboard } from 'swiper';
 import 'swiper/swiper-bundle.css';
 
 // Render choose html
