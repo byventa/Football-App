@@ -15,21 +15,19 @@ $ git clone https://github.com/byventa/Football-App.git
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
-
-# Go into the repository
+### 1.Go into the repository
 $ cd Football-App
 
-# Install dependencies
+### 2.Install dependencies
 $ npm install
 
-# Run app (development)
+### 3.Run app (development)
 $ npm run dev
 
-# Build app (production)
+### 4.Build app (production)
 $ npm run build
 
-## Deployment
+## 5.Deployment
 
 If you want to deploy this app use Github Pages
 $ npm run deploy
