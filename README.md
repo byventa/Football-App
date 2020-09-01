@@ -35,8 +35,8 @@ If you want to deploy this app use Github Pages
 ## Built With
 
 * [Swiper](https://swiperjs.com/) - Mobile touch slider.
-* API [Football-data](https://www.football-data.org/documentation/quickstart) - Premier League data API.
-* [JavaScript] - App is written in Vanilla JS. <3
+* [Football-Data API](https://www.football-data.org/documentation/quickstart) - Premier League data API.
+* JavaScript - App is fully written in Vanilla JS <3
 
 
 ## Authors
