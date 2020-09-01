@@ -9,28 +9,28 @@ https://byventa.github.io/Football-App/
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 ### Copy repository
-$ git clone https://github.com/byventa/Football-App.git
+```$ git clone https://github.com/byventa/Football-App.git```
 
 ## Installing
 
 A step by step series of examples that tell you how to get a development env running
 
 ### Go into the repository
-$ cd Football-App
+```$ cd Football-App```
 
 ### Install dependencies
-$ npm install
+```$ npm install```
 
 ### Run app (development)
-$ npm run dev
+```$ npm run dev```
 
 ### Build app (production)
-$ npm run build
+```$ npm run build```
 
 ## Deployment
 
 If you want to deploy this app use Github Pages
-$ npm run deploy
+```$ npm run deploy```
 
 ## Built With
 
