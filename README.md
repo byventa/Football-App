@@ -1,6 +1,6 @@
 # Premier League Fan App
 
-Premier League Fan App is an app for people that follow English Premier League and want to have stats, fixtures and twitter of their favourite team all in one place.
+Premier League Fan App is an app for people that follow English Premier League and want to have stats, fixtures and social media of their favourite team all in one place.
 
 ## Getting Started
 
