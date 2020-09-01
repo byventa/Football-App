@@ -332,4 +332,5 @@ export const loadTwitter = (teamID) => {
   ]);
   const markup = `<a class="twitter-timeline" data-dnt="true" data-theme="light" href="https://twitter.com/${twitterLinks.get(teamID)}"></a>`;
   document.querySelector('.twitter-feed').insertAdjacentHTML('beforeend', markup);
+  twttr.widgets.load();
 };

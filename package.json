@@ -20,6 +20,7 @@
     "copy-webpack-plugin": "^6.1.0",
     "css-loader": "^3.6.0",
     "file-loader": "^6.0.0",
+    "gh-pages": "^3.1.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
     "mini-css-extract-plugin": "^0.9.0",
@@ -31,6 +32,7 @@
     "webpack-merge": "^4.2.2"
   },
   "scripts": {
+    "deploy":"gh-pages -d dist",
     "dev": "webpack-dev-server --config webpack.dev.js --open",
     "build": "webpack --config webpack.prod.js",
     "safari": "webpack-dev-server --config webpack.dev.js --open --host 0.0.0.0 --port 3000"

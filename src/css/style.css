@@ -628,7 +628,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 .twitter-feed {
   grid-area: twitter-feed;
-  height: 470px;
+  height: 490px;
   overflow: scroll;
   overflow-x: hidden;
   border-radius: 10px;

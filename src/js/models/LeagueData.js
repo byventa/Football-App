@@ -5,7 +5,7 @@ export default class LeagueData {
     this.query = query;
   }
   async getLeagueData() {
-    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/teams`, {
+    await fetch(`https://api.football-data.org/v2/competitions/${this.query}/teams`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
     })
       .then(handleErrors)
@@ -22,7 +22,7 @@ export default class LeagueData {
       .finally((this.teams = null), (this.season = null), (this.competition = null));
   }
   async getMatchesData() {
-    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/matches`, {
+    await fetch(`https://api.football-data.org/v2/competitions/${this.query}/matches`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
     })
       .then(handleErrors)
@@ -41,7 +41,7 @@ export default class LeagueData {
       .finally(((this.allMatches = [-1]), (this.favTeamMatches = [undefined])));
   }
   async getLeagueStandings() {
-    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/standings`, {
+    await fetch(`https://api.football-data.org/v2/competitions/${this.query}/standings`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
     })
       .then(handleErrors)
@@ -53,7 +53,7 @@ export default class LeagueData {
       .finally((this.table = [-1]));
   }
   async getTopScorers() {
-    await fetch(`http://api.football-data.org/v2/competitions/${this.query}/scorers`, {
+    await fetch(`https://api.football-data.org/v2/competitions/${this.query}/scorers`, {
       headers: { 'X-Auth-Token': '7f177860aa5f4fa08d604940d69212f5' },
     })
       .then(handleErrors)
