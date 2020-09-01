@@ -1,11 +1,12 @@
 import './css/style.css';
+import './css/swiper-bundle.css';
+
 import regeneratorRuntime from 'regenerator-runtime';
 import LeagueData from './js/models/LeagueData';
 import * as chooseView from './js/views/chooseView';
 import * as teamView from './js/views/teamView';
 import * as searchView from './js/views/searchView';
 import { loaders, fans, cleanHTML } from './js/views/base';
-import 'swiper/swiper-bundle.css';
 // GLOBAL VARIABLES
 const data = {};
 window.i = data;
