@@ -2,6 +2,9 @@
 
 Premier League Fan App is an app for people that follow English Premier League and want to have stats, fixtures and social media of their favourite team all in one place.
 
+### Live
+https://byventa.github.io/Football-App/
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
