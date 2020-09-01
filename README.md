@@ -29,8 +29,6 @@ $ npm run build
 ## Deployment
 
 If you want to deploy this app use Github Pages
-
-# Deployment Github Pages
 $ npm run deploy
 
 ## Built With
