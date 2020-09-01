@@ -5,15 +5,23 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
   output: {
     filename: '[name].[contentHash].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: path.resolve(__dirname, 'dist'),
   },
   plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src', 'img'),
+          to: 'img'
+        }
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       minify: {
@@ -35,6 +43,7 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.css$/,
+        sideEffects: true,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
