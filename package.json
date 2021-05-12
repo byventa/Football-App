@@ -9,7 +9,7 @@
     "dom7": "^2.1.5",
     "regenerator-runtime": "^0.13.5",
     "ssr-window": "^2.0.0",
-    "swiper": "^6.0.2",
+    "swiper": "^6.5.1",
     "uniqid": "^5.2.0"
   },
   "devDependencies": {
